@@ -1,0 +1,19 @@
+{
+  "name": "nodetest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.3.0",
+    "should": "^11.2.1"
+  },
+  "dependencies": {
+    "async": "^2.4.0",
+    "mongodb": "^2.2.26"
+  }
+}

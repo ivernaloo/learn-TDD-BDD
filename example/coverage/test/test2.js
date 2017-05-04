@@ -21,6 +21,6 @@ describe('my test', function(){
                     expect(2).to.equal(2);
                     resolve();
                 }, 2000)
-            });
     })
+    });
 });

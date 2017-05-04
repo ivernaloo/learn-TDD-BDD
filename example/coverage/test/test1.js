@@ -20,7 +20,8 @@ describe('my test', function(){
                 setTimeout(function(){
                     expect(2).to.equal(2);
                     resolve();
-                }, 3000)    
-            });
+                }, 3000)
+
     })
+    });
 });
