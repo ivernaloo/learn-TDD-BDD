@@ -12,15 +12,15 @@ router.get('/', function(req, res, next) {
     //   fiboval: math.fibonacciAsync(req.query.fibonum)
     // });
     // Calculate using async-aware function, in this server
-     math.fibonacciAsync(req.query.fibonum, (err, fiboval) => {
-      res.render('fibonacci', {
-        title: "Calculate Fibonacci numbers",
-        fibonum: req.query.fibonum,
-        fiboval: fiboval
-      });
-    });
+    //  math.fibonacciAsync(req.query.fibonum, (err, fiboval) => {
+    //   res.render('fibonacci', {
+    //     title: "Calculate Fibonacci numbers",
+    //     fibonum: req.query.fibonum,
+    //     fiboval: fiboval
+    //   });
+    // });
     // Pass request off to back end server
-    /* var httpreq = require('http').request({
+     var httpreq = require('http').request({
       host: "localhost",
       port: process.env.SERVERPORT,
       path: "/fibonacci/"+Math.floor(req.query.fibonum),
@@ -38,7 +38,7 @@ router.get('/', function(req, res, next) {
       httpresp.on('error', err => { next(err); });
     });
     httpreq.on('error', err => { next(err); });
-    httpreq.end(); */
+    httpreq.end();
   } else {
     res.render('fibonacci', {
       title: "Calculate Fibonacci numbers",

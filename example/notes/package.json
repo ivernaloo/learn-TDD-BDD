@@ -1,11 +1,9 @@
 {
-  "name": "fibonacci",
+  "name": "notes",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "SERVERPORT=3002 DEBUG=fibonacci:* node ./bin/www",
-    "client": "node ./fiboclient",
-    "server": "SERVERPORT=3002 node ./fiboserver"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
