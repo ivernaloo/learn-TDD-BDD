@@ -29,7 +29,7 @@ app.set('view engine', 'ejs');
 var accessLogStream;
 if (process.env.REQUEST_LOG_FILE) {
     var logDirectory = path.dirname(process.env.REQUEST_LOG_FILE);
-    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory); // 同步检测
     accessLogStream = FileStreamRotator.getStream({
       filename: process.env.REQUEST_LOG_FILE,
       frequency: 'daily',
