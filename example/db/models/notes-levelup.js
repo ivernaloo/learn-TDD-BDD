@@ -29,7 +29,7 @@ exports.update = exports.create = function(key, title, body) {
     return connectDB().then(() => {
         var note = new Note(key, title, body);
         return new Promise((resolve, reject) => {
-            db.put(key, note, err => {
+            db.put(key, note, err => { // directly store object
                 if (err) reject(err);
                 else resolve(note);
             });
