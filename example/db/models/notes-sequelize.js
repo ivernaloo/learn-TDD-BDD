@@ -15,7 +15,7 @@ var sequlz;
 
 exports.connectDB = function() {
     
-    if (SQNote) return SQNote.sync();
+    if (SQNote) return SQNote.sync(); // ORM sync
     
     return new Promise((resolve, reject) => {
         fs.readFile(process.env.SEQUELIZE_CONNECT, 'utf8', (err, data) => {
