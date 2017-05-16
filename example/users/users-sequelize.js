@@ -1,7 +1,11 @@
 'use strict';
 
-const Sequelize = require("sequelize");
-const jsyaml    = require('js-yaml');
+/*
+* ORM logic proceed
+* 2017-5-16
+* */
+const Sequelize = require("sequelize"); // orm
+const jsyaml    = require('js-yaml'); // parser
 const fs        = require('fs');
 const util      = require('util');
 
@@ -16,16 +20,16 @@ exports.connectDB = function() {
     if (SQUser) return SQUser.sync();
     
     return new Promise((resolve, reject) => {
-        fs.readFile(process.env.SEQUELIZE_CONNECT, 'utf8', (err, data) => {
+        fs.readFile(process.env.SEQUELIZE_CONNECT, 'utf8', (err, data) => { // load config file
             if (err) reject(err);
             else resolve(data);
         });
     })
     .then(yamltext => {
-        return jsyaml.safeLoad(yamltext, 'utf8');
+        return jsyaml.safeLoad(yamltext, 'utf8'); // load configuration file
     })
     .then(params => {
-        log('Sequelize params '+ util.inspect(params));
+        log('Sequelize params '+ util.inspect(params)); // inspect the params details
         
         if (!sequlz) sequlz = new Sequelize(params.dbname, params.username, params.password, params.params);
         
@@ -99,13 +103,11 @@ exports.find = function(username) {
 };
 
 exports.userPasswordCheck = function(username, password) {
-    log('userPasswordCheck query= '+ username +' '+ password);
     return exports.connectDB().then(SQUser => {
         return SQUser.find({ where: { username: username } })
     })
     .then(user => {
-        log('userPasswordCheck query= '+ username +' '+ password
-            +' user= '+ (user && user != null ? user.username : "") +' '+ (user && user != null ? user.password : ""));
+        log('userPasswordCheck query= '+ username +' '+ password +' user= '+ user.username +' '+ user.password);
         if (!user) {
             return { check: false, username: username, message: "Could not find user" };
         } else if (user.username === username && user.password === password) {
@@ -119,7 +121,6 @@ exports.userPasswordCheck = function(username, password) {
 exports.findOrCreate = function(profile) {
     return exports.find(profile.id).then(user => {
         if (user) return user;
-        log('findOrCreate creating => '+ util.inspect(profile));
         return exports.create(profile.id, profile.password, profile.provider,
                        profile.familyName, profile.givenName, profile.middleName,
                        profile.emails, profile.photos);
@@ -133,9 +134,9 @@ exports.listUsers = function() {
     .catch(err => console.error(err));
 };
 
+// format the data
 exports.sanitizedUser = function(user) {
     log(util.inspect(user));
-    if (!user) throw new Error('No user to sanitize')
     return {
         id: user.username,
         username: user.username,

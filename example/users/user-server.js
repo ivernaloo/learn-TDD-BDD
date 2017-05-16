@@ -26,7 +26,7 @@ server.post('/create-user', (req, res, next) => {
                       req.params.familyName, req.params.givenName, req.params.middleName,
                       req.params.emails,   req.params.photos)
     .then(result => {
-        // log('created '+ util.inspect(result));
+        log('created '+ util.inspect(result));
         res.send(result);
         next(false);
     })
@@ -39,7 +39,7 @@ server.post('/update-user/:username', (req, res, next) => {
                       req.params.familyName, req.params.givenName, req.params.middleName,
                       req.params.emails,   req.params.photos)
     .then(foo => {
-        // log('updated '+ util.inspect(result));
+        log('updated '+ util.inspect(result));
         res.send(result);
         next(false);
     })
@@ -57,7 +57,7 @@ server.post('/find-or-create', (req, res, next) => {
         emails: req.params.emails, photos: req.params.photos
     })
     .then(result => {
-        // log('created '+ util.inspect(result));
+        log('created '+ util.inspect(result));
         res.send(result);
         next(false);
     })
@@ -77,27 +77,10 @@ server.get('/find/:username', (req, res, next) => {
     .catch(err => { res.send(500, err); error(err.stack); next(false); });
 });
 
-// Determine if the user exists
-server.get('/exists/:username', (req, res, next) => {
-    usersModel.find(req.params.username).then(user => {
-        if (!user) {
-            res.send({ exists: false, username, message: "Did not find "+ req.params.username });
-        } else {
-            res.send({ exists: true, username });
-        }
-        next(false);
-    })
-    .catch(err => {
-        res.send(500, { exists: false, username, message: err.stack });
-        error(err.stack);
-        next(false);
-    });
-});
-
 // Delete/destroy a user record
 server.del('/destroy/:username', (req, res, next) => {
     usersModel.destroy(req.params.username)
-    .then(() => res.send({}) )
+    .then(() => { res.send({}); next(false); } )
     .catch(err => { res.send(500, err); error(err.stack); next(false); });
 });
 
@@ -119,7 +102,7 @@ server.get('/list', (req, res, next) => {
     .catch(err => { res.send(500, err); error(err.stack); next(false); });
 });
 
-server.listen(process.env.PORT, process.env.REST_LISTEN ? process.env.REST_LISTEN : "localhost", function() {
+server.listen(process.env.PORT, "localhost", function() {
   log(server.name +' listening at '+ server.url);
 });
 
@@ -128,7 +111,6 @@ server.listen(process.env.PORT, process.env.REST_LISTEN ? process.env.REST_LISTE
 var apiKeys = [ { user: 'them', key: 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF' } ];
 
 function check(req, res, next) {
-    log('check');
     if (req.authorization) {
         var found = false;
         for (let auth of apiKeys) {
