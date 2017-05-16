@@ -28,12 +28,12 @@ exports.connectDB = function() {
 exports.create = function(key, title, body) {
     return exports.connectDB()
     .then(db => {
-        var note = new Note(key, title, body);
-        var collection = db.collection('notes');
-        log('CREATE '+ util.inspect(note));
-        return collection.insertOne({
-            notekey: key, title: title, body: body
-        }).then(result => { return note; });
+        var note = new Note(key, title, body); // build Note Object
+        var collection = db.collection('notes'); // build collection
+        log('CREATE '+ util.inspect(note)); // log detail
+        return collection.insertOne({ // insert one object
+            notekey: key, title: title, body: body // detail
+        }).then(result => { return note; }); // special fixed the output info
     });
 };
 
@@ -79,7 +79,7 @@ exports.keylist = function() {
         return new Promise((resolve, reject) => {
             var keyz = [];
             collection.find({}).forEach(
-                note => { keyz.push(note.notekey); },
+                note => { keyz.push(note.notekey); }, // only put note key into the keylist
                 err  => {
                     if (err) reject(err);
                     else {

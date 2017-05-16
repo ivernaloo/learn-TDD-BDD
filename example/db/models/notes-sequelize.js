@@ -18,16 +18,16 @@ exports.connectDB = function() {
     if (SQNote) return SQNote.sync(); // ORM sync
     
     return new Promise((resolve, reject) => {
-        fs.readFile(process.env.SEQUELIZE_CONNECT, 'utf8', (err, data) => {
+        fs.readFile(process.env.SEQUELIZE_CONNECT, 'utf8', (err, data) => { // read config file
             if (err) reject(err);
             else resolve(data);
         });
     })
     .then(yamltext => {
-        return jsyaml.safeLoad(yamltext, 'utf8');
+        return jsyaml.safeLoad(yamltext, 'utf8'); // load yaml
     })
     .then(params => {
-        sequlz = new Sequelize(params.dbname, params.username, params.password, params.params);
+        sequlz = new Sequelize(params.dbname, params.username, params.password, params.params); // parse yaml and parse into the logic function
         SQNote = sequlz.define('Note', {
             notekey: { type: Sequelize.STRING, primaryKey: true, unique: true },
             title: Sequelize.STRING,
