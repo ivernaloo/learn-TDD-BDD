@@ -1,6 +1,6 @@
 'use strict';
 
-const restify = require('restify');
+const restify = require('restify'); // restify server
 const util    = require('util');
 
 const log   = require('debug')('users:server');
@@ -8,15 +8,15 @@ const error = require('debug')('users:error');
 
 const usersModel = require('./users-sequelize');
 
-var server = restify.createServer({
+var server = restify.createServer({ // creat instance
     name: "User-Auth-Service",
     version: "0.0.1"
 });
 
-server.use(restify.authorizationParser());
+server.use(restify.authorizationParser()); // auth
 server.use(check);
-server.use(restify.queryParser());
-server.use(restify.bodyParser({
+server.use(restify.queryParser()); // query parser
+server.use(restify.bodyParser({ // body parser
     mapParams: true
 }));
 
@@ -24,7 +24,7 @@ server.use(restify.bodyParser({
 server.post('/create-user', (req, res, next) => {
     usersModel.create(req.params.username, req.params.password,  req.params.provider,
                       req.params.familyName, req.params.givenName, req.params.middleName,
-                      req.params.emails,   req.params.photos)
+                      req.params.emails,   req.params.photos) // pass the parameters to the instance
     .then(result => {
         log('created '+ util.inspect(result));
         res.send(result);
@@ -40,10 +40,10 @@ server.post('/update-user/:username', (req, res, next) => {
                       req.params.emails,   req.params.photos)
     .then(foo => {
         log('updated '+ util.inspect(result));
-        res.send(result);
+        res.send(result);   // send the result to client
         next(false);
     })
-    .catch(err => { res.send(500, err); error(err.stack); next(false); });
+    .catch(err => { res.send(500, err); error(err.stack); next(false); });  // terminal and response 500 status
 });
 
 // Find a user, if not found create one given profile information
@@ -59,18 +59,18 @@ server.post('/find-or-create', (req, res, next) => {
     .then(result => {
         log('created '+ util.inspect(result));
         res.send(result);
-        next(false);
+        next(false);    // response the request
     })
     .catch(err => { res.send(500, err); error(err.stack); next(false); });
 });
 
 // Find the user data (does not return password)
 server.get('/find/:username', (req, res, next) => {
-    usersModel.find(req.params.username).then(user => {
-        if (!user) {
+    usersModel.find(req.params.username).then(user => { // req.params
+        if (!user) {    // not response user
             res.send(404, new Error("Did not find "+ req.params.username));
         } else {
-            res.send(user);
+            res.send(user); // response user
         }
         next(false);
     })
@@ -80,7 +80,7 @@ server.get('/find/:username', (req, res, next) => {
 // Delete/destroy a user record
 server.del('/destroy/:username', (req, res, next) => {
     usersModel.destroy(req.params.username)
-    .then(() => { res.send({}); next(false); } )
+    .then(() => { res.send({}); next(false); } ) // response null
     .catch(err => { res.send(500, err); error(err.stack); next(false); });
 });
 
@@ -108,15 +108,18 @@ server.listen(process.env.PORT, "localhost", function() {
 
 // Mimic API Key authentication.
 
-var apiKeys = [ { user: 'them', key: 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF' } ];
+var apiKeys = [ { user: 'them', key: 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF' } ]; //key?
 
+/*
+* check middleware
+* */
 function check(req, res, next) {
     if (req.authorization) {
         var found = false;
         for (let auth of apiKeys) {
             if (auth.key  === req.authorization.basic.password
              && auth.user === req.authorization.basic.username) {
-                found = true;
+                found = true; // pass the auth
                 break;
             }
         }
@@ -124,10 +127,10 @@ function check(req, res, next) {
         else {
             res.send(401, new Error("Not authenticated"));
             error('Failed authentication check '+ util.inspect(req.authorization));
-            next(false);
+            next(false); // fail the check
         }
     } else {
-        res.send(500, new Error('No Authorization Key'));
+        res.send(500, new Error('No Authorization Key')); // send the err
         error('NO AUTHORIZATION');
         next(false);
     }

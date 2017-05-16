@@ -15,6 +15,7 @@ const error = require('debug')('users:error');
 var SQUser;
 var sequlz;
 
+// connect instance
 exports.connectDB = function() {
     
     if (SQUser) return SQUser.sync();
@@ -31,7 +32,7 @@ exports.connectDB = function() {
     .then(params => {
         log('Sequelize params '+ util.inspect(params)); // inspect the params details
         
-        if (!sequlz) sequlz = new Sequelize(params.dbname, params.username, params.password, params.params);
+        if (!sequlz) sequlz = new Sequelize(params.dbname, params.username, params.password, params.params); // sequelize instance
         
         // These fields largely come from the Passport / Portable Contacts schema.
         // See http://www.passportjs.org/docs/profile
@@ -40,7 +41,7 @@ exports.connectDB = function() {
         // additional tables for those.
         //
         // The Portable Contacts "id" field maps to the "username" field here
-        if (!SQUser) SQUser = sequlz.define('User', {
+        if (!SQUser) SQUser = sequlz.define('User', { // User Object
             username: { type: Sequelize.STRING, unique: true },
             password: Sequelize.STRING,
             provider: Sequelize.STRING,
@@ -55,7 +56,7 @@ exports.connectDB = function() {
 };
 
 exports.create = function(username, password, provider, familyName, givenName, middleName, emails, photos) {
-    return exports.connectDB().then(SQUser => {
+    return exports.connectDB().then(SQUser => { // pass the parameters into the create function
         return SQUser.create({
             username: username,
             password: password,
@@ -70,8 +71,8 @@ exports.create = function(username, password, provider, familyName, givenName, m
 };
 
 exports.update = function(username, password, provider, familyName, givenName, middleName, emails, photos) {
-    return exports.find(username).then(user => {
-        return user ? user.updateAttributes({
+    return exports.find(username).then(user => {    // find first then check the exist status
+        return user ? user.updateAttributes({   // update instance
             password: password,
             provider: provider,
             familyName: familyName,
@@ -89,7 +90,7 @@ exports.destroy = function(username) {
     })
     .then(user => {
         if (!user) throw new Error('Did not find requested '+ username +' to delete');
-        user.destroy();
+        user.destroy(); // destroy the instance
         return;
     });
 };
@@ -99,28 +100,28 @@ exports.find = function(username) {
     return exports.connectDB().then(SQUser => {
         return SQUser.find({ where: { username: username } })
     })
-    .then(user => user ? exports.sanitizedUser(user) : undefined);
+    .then(user => user ? exports.sanitizedUser(user) : undefined);  // export and fresh format
 };
 
 exports.userPasswordCheck = function(username, password) {
     return exports.connectDB().then(SQUser => {
-        return SQUser.find({ where: { username: username } })
+        return SQUser.find({ where: { username: username } }) // get the password
     })
     .then(user => {
         log('userPasswordCheck query= '+ username +' '+ password +' user= '+ user.username +' '+ user.password);
         if (!user) {
             return { check: false, username: username, message: "Could not find user" };
         } else if (user.username === username && user.password === password) {
-            return { check: true, username: user.username };
+            return { check: true, username: user.username }; // response user instance
         } else {
-            return { check: false, username: username, message: "Incorrect password" };
+            return { check: false, username: username, message: "Incorrect password" }; // response wrong response
         }
     });
 };
 
-exports.findOrCreate = function(profile) {
-    return exports.find(profile.id).then(user => {
-        if (user) return user;
+exports.findOrCreate = function(profile) {  // find and craete
+    return exports.find(profile.id).then(user => { // pipeline syntax from profile.id get the user instance and create?
+        if (user) return user; // if exist then return else create new instance
         return exports.create(profile.id, profile.password, profile.provider,
                        profile.familyName, profile.givenName, profile.middleName,
                        profile.emails, profile.photos);
@@ -129,9 +130,9 @@ exports.findOrCreate = function(profile) {
 
 exports.listUsers = function() {
     return exports.connectDB()
-    .then(SQUser => SQUser.findAll({}) )
-    .then(userlist => userlist.map(user => exports.sanitizedUser(user)))
-    .catch(err => console.error(err));
+    .then(SQUser => SQUser.findAll({}) ) // get all
+    .then(userlist => userlist.map(user => exports.sanitizedUser(user))) // format
+    .catch(err => console.error(err)); // put the error
 };
 
 // format the data
