@@ -10,6 +10,11 @@ var client = restify.createJsonClient({
 
 client.basicAuth('them', 'D4ED43C0-8BD6-4FE2-B358-7C0E230D11EF');
 
+/*
+* excute command
+* CMD PORT=3333 node users-find.js me
+* through process.argv[2] get the parameter me
+* */
 client.get('/find/'+ process.argv[2], 
 (err, req, res, obj) => {
     if (err) console.error(err.stack);
