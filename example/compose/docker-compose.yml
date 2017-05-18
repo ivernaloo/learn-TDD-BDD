@@ -8,13 +8,11 @@ services:
       - authnet
     volumes:
       - db-auth-data:/var/lib/mysql
+      # - ../db-auth/data:/var/lib/mysql
 
   userauth:
     build: ../users
     container_name: userauth
-    environment:
-      NODE_ENV: "production"
-      SEQUELIZE_CONNECT: "sequelize-docker-mysql.yaml"
     networks:
       - authnet
       - notesauth
@@ -31,14 +29,11 @@ services:
       - frontnet
     volumes:
       - db-notes-data:/var/lib/mysql
+      # - ../db-notes/data:/var/lib/mysql
 
   notesapp:
     build: ../notes
     container_name: notesapp
-    environment:
-      NODE_ENV: "production"
-      SEQUELIZE_CONNECT: "models/sequelize-docker-mysql.yaml"
-      USER_SERVICE_URL: "http://userauth:3333"
     networks:
       - frontnet
       - notesauth

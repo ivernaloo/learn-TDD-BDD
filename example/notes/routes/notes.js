@@ -11,7 +11,7 @@ const error = require('debug')('notes:error');
 
 const usersRouter = require('./users');
 
-const messagesModel = require('../models/messages-sequelize');  // message orm
+const messagesModel = require('../models/messages-sequelize');
 
 // Add Note. (create)
 router.get('/add', usersRouter.ensureAuthenticated, (req, res, next) => {
