@@ -119,6 +119,7 @@ server.get('/list', (req, res, next) => {
     .catch(err => { res.send(500, err); error(err.stack); next(false); });
 });
 
+// listen to environment port
 server.listen(process.env.PORT, process.env.REST_LISTEN ? process.env.REST_LISTEN : "localhost", function() {
   log(server.name +' listening at '+ server.url);
 });
