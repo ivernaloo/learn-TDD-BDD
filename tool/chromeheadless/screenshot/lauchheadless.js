@@ -1,4 +1,4 @@
-const { ChromeLauncher } = require('lighthouse/lighthouse-cli/chrome-launcher')
+const { ChromeLauncher } = require('lighthouse/lighthouse-cli/chrome-launcher') // chrome launcher method
 const chrome = require('chrome-remote-interface')
 const fs = require('fs')
 const deviceMetrics = {
@@ -15,13 +15,16 @@ const screenshotMetrics = {
 let protocol
 let launcher
 
+/*
+* launch chrome method
+* */
 function launchChrome () {
-    const launcher = new ChromeLauncher({
+    const launcher = new ChromeLauncher({ // chrome launcher is a wraper promise instance
         port: 9222,
         autoSelectChrome: true,
         additionalFlags: ['--window-size=412,732', '--disable-gpu', '--headless']
-    })
-    return launcher.run().then(() => launcher)
+    }) // lauch chrome
+    return launcher.run().then(() => launcher) // return chrome instance
 }
 function getScreenShot () {
     const { Page, Emulation } = protocol
@@ -29,7 +32,7 @@ function getScreenShot () {
         .then(() => {
             Emulation.setDeviceMetricsOverride(deviceMetrics) // 配置浏览器尺寸
             Emulation.setVisibleSize(screenshotMetrics) // 配置截图尺寸
-            Page.navigate({ url: 'https://github.com/' })
+            Page.navigate({ url: 'https://baidu.com/' })
             return new Promise((resolve, reject) => {
                 Page.loadEventFired(() => {
                     resolve(Page.captureScreenshot({ format: 'jpeg', fromSurface: true }))
@@ -62,7 +65,6 @@ launchChrome()
         launcher.kill()
     })
     .catch(console.error);
-
 
 
 
