@@ -16,8 +16,8 @@ let protocol
 let launcher
 
 /*
-* launch chrome method
-* */
+ * launch chrome method
+ * */
 function launchChrome () {
     const launcher = new ChromeLauncher({ // chrome launcher is a wraper promise instance
         port: 9222,
@@ -54,11 +54,12 @@ launchChrome( )
         launcher = Launcher
         return new Promise((resolve, reject) =>{
             chrome(Protocol => {
-                 protocol = Protocol
+                protocol = Protocol
                 resolve()
             }).on('error', err => { reject(err) })
         })
     })
+    .then(setUAandCookie)
     .then(() => {
         protocol.close()
         launcher.kill()
@@ -70,10 +71,10 @@ launchChrome( )
 function getStyle () {
     const { Page, CSS, DOM } = protocol
     return Promise.all([
-            DOM.enable(),
-            CSS.enable(),
-            Page.enable()
-        ])
+        DOM.enable(),
+        CSS.enable(),
+        Page.enable()
+    ])
         .then(() => {
             Page.navigate({ url: 'https://github.com/' })
             return new Promise((resolve, _) => {
@@ -90,8 +91,8 @@ function getStyle () {
 function search () {
     const { Page, Runtime } = protocol
     return Promise.all([
-            Page.enable()
-        ])
+        Page.enable()
+    ])
         .then(() => {
             Page.navigate({ url: 'https://www.baidu.com/' })
             return new Promise((resolve, _) => {
@@ -128,12 +129,12 @@ function search () {
 function setUAandCookie () {
     const { Page, Network } = protocol
     return Promise.all([
-            Network.enable(),
-            Page.enable()
-        ])
+        Network.enable(),
+        Page.enable()
+    ])
         .then(() => {
             const userAgent =
-                      Network.setUserAgentOverride({ userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.71 Safari/537.36" })
+                Network.setUserAgentOverride({ userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.71 Safari/537.36" })
             Network.setCookie({
                 url: 'https://github.com',
                 name: 'test',
