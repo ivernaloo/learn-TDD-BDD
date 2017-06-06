@@ -1,0 +1,17 @@
+.project
+*.DS_Store
+*.idea
+node_modules
+npm-debug.log
+lib-cov
+coverage.html
+selenium-debug.log
+/tests/reports
+/tests/screenshoots
+/features/reports
+phantomjsdriver.log
+tests_output
+/features/report
+*~
+\#*
+\.#*
