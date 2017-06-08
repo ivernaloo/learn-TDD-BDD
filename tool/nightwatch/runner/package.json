@@ -4,7 +4,7 @@
   "description": "x",
   "main": "index.js",
   "scripts": {
-    "test": "nightwatch -c nightwatch.conf.js"
+    "test": "node test/runner.js"
   },
   "author": "",
   "license": "ISC",
