@@ -1,5 +1,5 @@
 module.exports = {
-  "src_folders"  : ["e2e/"],
+  "src_folders"  : ["test/e2e/"],
   "output_folder": "coverage",
 
   "selenium": {
@@ -18,10 +18,7 @@ module.exports = {
       "desiredCapabilities": {
         "browserName"      : "chrome",
         "javascriptEnabled": true,
-        "acceptSslCerts"   : true,
-        "chromeOptions"    : {
-          "args": ["start-fullscreen"]
-        }
+        "acceptSslCerts"   : true
       }
     }
   }

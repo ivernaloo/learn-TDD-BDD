@@ -10,6 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "chromedriver": "^2.29.0",
+    "cross-spawn": "^5.1.0",
+    "nightwatch": "^0.9.15",
     "selenium-server-standalone-jar": "^2.53.1"
   }
 }
