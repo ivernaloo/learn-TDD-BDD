@@ -4,11 +4,11 @@ module.exports = {
 
   "selenium" : {
     "start_process" : true,
-    "server_path" : "./node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-2.53.1.jar",
+    "server_path" : require("selenium-server-standalone-jar").path,
     "host": "127.0.0.1",
     "port" : 4444,
     "cli_args" : {
-      "webdriver.chrome.driver" : "./node_modules/chromedriver/bin/chromedriver"
+      "webdriver.chrome.driver" : require("chromedriver").path
     }
   },
 
@@ -16,7 +16,7 @@ module.exports = {
     "default" : {
       "selenium_port": 4444,
       "selenium_host": "localhost",
-      "silent": false
+      "silent": true
     },
 
     "chrome" : {
